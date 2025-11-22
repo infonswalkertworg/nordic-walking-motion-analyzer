@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nordic Walking Motion Analyzer - Multi-Angle View</title>
+    <style>
+        :root {
+  /* Primitive Color Tokens */
+  --color-white: rgba(255, 255, 255, 1);
+  --color-black: rgba(0, 0, 0, 1);
+  --color-cream-50: rgba(252, 252, 249, 1);
+  --color-cream-100: rgba(255, 255, 253, 1);
+  --color-gray-200: rgba(245, 245, 245, 1);
+  --color-gray-300: rgba(167, 169, 169, 1);
+  --color-gray-400: rgba(119, 124, 124, 1);
+  --color-slate-500: rgba(98, 108, 113, 1);
+  --color-brown-600: rgba(94, 82, 64, 1);
+  --color-charcoal-700: rgba(31, 33, 33, 1);
+  --color-charcoal-800: rgba(38, 40, 40, 1);
+  --color-slate-900: rgba(19, 52, 59, 1);
+  --color-teal-300: rgba(50, 184, 198, 1);
+  --color-teal-400: rgba(45, 166, 178, 1);
+  --color-teal-500: rgba(33, 128, 141, 1);
+  --color-teal-600: rgba(29, 116, 128, 1);
+  --color-teal-700: rgba(26, 104, 115, 1);
+  --color-teal-800: rgba(41, 150, 161, 1);
+  --color-red-400: rgba(255, 84, 89, 1);
+  --color-red-500: rgba(192, 21, 47, 1);
+  --color-orange-400: rgba(230, 129, 97, 1);
+  --color-orange-500: rgba(168, 75, 47, 1);
+
+  /* RGB versions for opacity control */
+  --color-brown-600-rgb: 94, 82, 64;
+  --color-teal-500-rgb: 33, 128, 141;
+  --color-slate-900-rgb: 19, 52, 59;
+  --color-slate-500-rgb: 98, 108, 113;
+  --color-red-500-rgb: 192, 21, 47;
+  --color-red-400-rgb: 255, 84, 89;
+  --color-orange-500-rgb: 168, 75, 47;
+  --color-orange-400-rgb: 230, 129, 97;
+
+  /* Background color tokens (Light Mode) */
+  --color-bg-1: rgba(59, 130, 246, 0.08);
+  --color-bg-2: rgba(245, 158, 11, 0.08);
+  --color-bg-3: rgba(34, 197, 94, 0.08);
+  --color-bg-4: rgba(239, 68, 68, 0.08);
+  --color-bg-5: rgba(147, 51, 234, 0.08);
+  --color-bg-6: rgba(249, 115, 22, 0.08);
+  --color-bg-7: rgba(236, 72, 153, 0.08);
+  --color-bg-8: rgba(6, 182, 212, 0.08);
+
+  /* Semantic Color Tokens (Light Mode) */
+  --color-background: var(--color-cream-50);
+  --color-surface: var(--color-cream-100);
+  --color-text: var(--color-slate-900);
+  --color-text-secondary: var(--color-slate-500);
+  --color-primary: var(--color-teal-500);
+  --color-primary-hover: var(--color-teal-600);
+  --color-primary-active: var(--color-teal-700);
+  --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+  --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-btn-primary-text: var(--color-cream-50);
+  --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-error: var(--color-red-500);
+  --color-success: var(--color-teal-500);
+  --color-warning: var(--color-orange-500);
+  --color-info: var(--color-slate-500);
+  --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+  --color-select-caret: rgba(var(--color-slate-900-rgb), 0.8);
+
+  --focus-ring: 0 0 0 3px var(--color-focus-ring);
+  --focus-outline: 2px solid var(--color-primary);
+  --status-bg-opacity: 0.15;
+  --status-border-opacity: 0.25;
+
+  /* Typography */
+  --font-family-base: "FKGroteskNeue", "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-2xl: 20px;
+  --font-size-3xl: 24px;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 550;
+  --font-weight-bold: 600;
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+
+  /* Spacing */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-base: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-gray-400-rgb: 119, 124, 124;
+    --color-teal-300-rgb: 50, 184, 198;
+    --color-gray-300-rgb: 167, 169, 169;
+    --color-gray-200-rgb: 245, 245, 245;
+    --color-bg-1: rgba(29, 78, 216, 0.15);
+    --color-bg-2: rgba(180, 83, 9, 0.15);
+    --color-bg-3: rgba(21, 128, 61, 0.15);
+    --color-bg-4: rgba(185, 28, 28, 0.15);
+    --color-bg-5: rgba(107, 33, 168, 0.15);
+    --color-bg-6: rgba(194, 65, 12, 0.15);
+    --color-bg-7: rgba(190, 24, 93, 0.15);
+    --color-bg-8: rgba(8, 145, 178, 0.15);
+    --color-background: var(--color-charcoal-700);
+    --color-surface: var(--color-charcoal-800);
+    --color-text: var(--color-gray-200);
+    --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+    --color-primary: var(--color-teal-300);
+    --color-primary-hover: var(--color-teal-400);
+    --color-primary-active: var(--color-teal-800);
+    --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+    --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
+    --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
+    --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+    --color-error: var(--color-red-400);
+    --color-success: var(--color-teal-300);
+    --color-warning: var(--color-orange-400);
+    --color-info: var(--color-gray-300);
+    --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
+    --color-btn-primary-text: var(--color-slate-900);
+    --color-card-border: rgba(var(--color-gray-400-rgb), 0.2);
+    --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
+    --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
+    --color-success-rgb: var(--color-teal-300-rgb);
+    --color-error-rgb: var(--color-red-400-rgb);
+    --color-warning-rgb: var(--color-orange-400-rgb);
+    --color-info-rgb: var(--color-gray-300-rgb);
+  }
+}
+
+@font-face {
+  font-family: 'FKGroteskNeue';
+  src: url('https://r2cdn.perplexity.ai/fonts/FKGroteskNeue.woff2') format('woff2');
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family-base);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  line-height: var(--line-height-normal);
+  padding: var(--space-24);
+}
+
+.app-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.app-header {
+  margin-bottom: var(--space-24);
+}
+
+.app-header h1 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-8);
+}
+
+.app-header p {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: var(--space-24);
+}
+
+.preview-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+.video-container {
+  position: relative;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-card-border);
+  overflow: hidden;
+  aspect-ratio: 16/9;
+}
+
+.video-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.upload-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface);
+  gap: var(--space-16);
+}
+
+.upload-overlay.hidden {
+  display: none;
+}
+
+.upload-icon {
+  font-size: 48px;
+  opacity: 0.5;
+}
+
+.upload-text {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+}
+
+.controls-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+.control-panel {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-card-border);
+  padding: var(--space-16);
+}
+
+.panel-header {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-16);
+  color: var(--color-text);
+}
+
+.button-group {
+  display: flex;
+  gap: var(--space-8);
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: var(--space-8) var(--space-16);
+  border-radius: var(--radius-base);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  border: 1px solid var(--color-border);
+  background: var(--color-secondary);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.btn:hover {
+  background: var(--color-secondary-hover);
+}
+
+.btn:active {
+  background: var(--color-secondary-active);
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-btn-primary-text);
+  border-color: var(--color-primary);
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+.btn-primary:active {
+  background: var(--color-primary-active);
+  border-color: var(--color-primary-active);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.file-input {
+  display: none;
+}
+
+.view-selector {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-8);
+}
+
+.view-btn {
+  padding: var(--space-12);
+  border-radius: var(--radius-base);
+  border: 2px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+}
+
+.view-btn:hover {
+  border-color: var(--color-primary);
+  background: var(--color-bg-1);
+}
+
+.view-btn.active {
+  border-color: var(--color-primary);
+  background: var(--color-bg-1);
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+
+.view-icon {
+  font-size: 24px;
+}
+
+.view-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.view-desc {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.toggle-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+.toggle-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toggle-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+
+.toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: var(--color-secondary);
+  transition: 0.3s;
+  border-radius: 24px;
+  border: 1px solid var(--color-border);
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: var(--color-surface);
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+  transform: translateX(20px);
+}
+
+.angle-display {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+.angle-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-8);
+  background: var(--color-bg-1);
+  border-radius: var(--radius-base);
+}
+
+.angle-name {
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+
+.angle-value {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+.angle-value.good {
+  color: #00FF00;
+}
+
+.angle-value.warning {
+  color: #FFFF00;
+}
+
+.angle-value.error {
+  color: #FF0000;
+}
+
+.diagnostics-panel {
+  margin-bottom: var(--space-16);
+}
+
+.diagnostics-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+}
+
+.diagnostic-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-8);
+  background: var(--color-bg-1);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+}
+
+.diagnostic-label {
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.diagnostic-value {
+  color: var(--color-text);
+  font-weight: var(--font-weight-semibold);
+}
+
+.diagnostic-value.success {
+  color: var(--color-success);
+}
+
+.diagnostic-value.warning {
+  color: var(--color-warning);
+}
+
+.diagnostic-value.error {
+  color: var(--color-error);
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.stat-box {
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.stat-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  display: block;
+  margin-bottom: var(--space-2);
+}
+
+.stat-value {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.stat-value.current {
+  color: var(--color-primary);
+  font-size: var(--font-size-base);
+}
+
+.playback-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+  flex-wrap: wrap;
+  padding: var(--space-12);
+  background: var(--color-bg-1);
+  border-radius: var(--radius-base);
+}
+
+.speed-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.speed-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-right: var(--space-4);
+}
+
+.btn-speed {
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--font-size-xs);
+  min-width: 50px;
+}
+
+.btn-speed.active {
+  background: var(--color-primary);
+  color: var(--color-btn-primary-text);
+  border-color: var(--color-primary);
+}
+
+.time-display {
+  font-family: var(--font-family-mono, monospace);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  padding: var(--space-4) var(--space-8);
+  background: var(--color-secondary);
+  border-radius: var(--radius-sm);
+}
+
+.frame-controls {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.btn-sm {
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--font-size-sm);
+}
+
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-4) var(--space-12);
+  background: var(--color-bg-3);
+  border-radius: var(--radius-base);
+  font-size: var(--font-size-xs);
+  color: var(--color-success);
+}
+
+.status-indicator.error {
+  background: var(--color-bg-4);
+  color: var(--color-error);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+@media (max-width: 1024px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>Nordic Walking Motion Analyzer</h1>
+            <p>多角度動作分析系統 - 上傳影片或啟動攝影機進行分析</p>
+        </header>
+
+        <!-- Diagnostics Panel -->
+        <div class="control-panel diagnostics-panel" id="diagnosticsPanel">
+            <div class="panel-header">🔧 系統診斷 (Android 相容性)</div>
+            <div class="diagnostics-grid" id="diagnosticsContent">
+                <div class="diagnostic-item">
+                    <span class="diagnostic-label">瀏覽器相容性:</span>
+                    <span class="diagnostic-value" id="diagBrowser">⏳ 檢查中...</span>
+                </div>
+                <div class="diagnostic-item">
+                    <span class="diagnostic-label">檔案輸入支援:</span>
+                    <span class="diagnostic-value" id="diagFileInput">⏳ 檢查中...</span>
+                </div>
+                <div class="diagnostic-item">
+                    <span class="diagnostic-label">攝影機存取:</span>
+                    <span class="diagnostic-value" id="diagCamera">⏳ 檢查中...</span>
+                </div>
+                <div class="diagnostic-item">
+                    <span class="diagnostic-label">建議輸入方式:</span>
+                    <span class="diagnostic-value" id="diagRecommended">⏳ 檢查中...</span>
+                </div>
+            </div>
+            <div class="button-group" style="margin-top: 16px;">
+                <button class="btn btn-primary" id="skipDiagnosisBtn" onclick="app.skipDiagnosis()">
+                    ⏭️ 跳過診斷 - 直接使用應用程式
+                </button>
+            </div>
+            <div id="diagnosticsStatus" style="margin-top: 12px; font-size: var(--font-size-sm); color: var(--color-text-secondary); text-align: center;">
+                正在檢查系統相容性...
+            </div>
+        </div>
+        <div class="main-grid">
+            <div class="preview-section">
+                <div class="control-panel">
+                    <div class="playback-controls" id="playbackControls" style="display: none;">
+                        <button class="btn btn-primary" id="playPauseBtn" onclick="app.togglePlayPause()">
+                            ▶️ 播放
+                        </button>
+                        <div class="speed-controls">
+                            <label class="speed-label">速度:</label>
+                            <button class="btn btn-speed" data-speed="0.25" onclick="app.setSpeed(0.25)">0.25x</button>
+                            <button class="btn btn-speed" data-speed="0.5" onclick="app.setSpeed(0.5)">0.5x</button>
+                            <button class="btn btn-speed" data-speed="0.75" onclick="app.setSpeed(0.75)">0.75x</button>
+                            <button class="btn btn-speed active" data-speed="1" onclick="app.setSpeed(1)">1x</button>
+                            <button class="btn btn-speed" data-speed="1.5" onclick="app.setSpeed(1.5)">1.5x</button>
+                        </div>
+                        <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
+                        <div class="frame-controls">
+                            <button class="btn btn-sm" onclick="app.previousFrame()" title="上一幀">⏮</button>
+                            <button class="btn btn-sm" onclick="app.nextFrame()" title="下一幀">⏭</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-container">
+                    <canvas id="outputCanvas" class="video-canvas"></canvas>
+                    <div id="uploadOverlay" class="upload-overlay">
+                        <div class="upload-icon">📹</div>
+                        <div class="upload-text">上傳影片或啟動攝影機開始分析</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls-section">
+                <div class="control-panel">
+                    <div class="panel-header">輸入來源</div>
+                    <div class="button-group">
+                        <button class="btn" onclick="app.handleImportVideo()">
+                            📁 匯入影片
+                        </button>
+                        <button class="btn" onclick="app.handleCaptureVideo()">
+                            📷 拍攝影片
+                        </button>
+                        <button class="btn" id="cameraBtn" onclick="app.toggleCamera()">
+                            🎥 即時攝影機
+                        </button>
+                        <input type="file" id="videoFileInput" class="file-input" accept="video/*" onchange="app.handleFileSelected(event)">
+                        <input type="file" id="videoCaptureInput" class="file-input" accept="video/*" capture="environment" onchange="app.handleFileSelected(event)">
+                        <input type="file" id="videoFallbackInput" class="file-input" onchange="app.handleFileSelected(event)">
+                    </div>
+                </div>
+
+                <div class="control-panel">
+                    <div class="panel-header">視角選擇</div>
+                    <div class="view-selector">
+                        <button class="view-btn active" data-view="front" onclick="app.setView('front')">
+                            <div class="view-icon">👤</div>
+                            <div class="view-label">正面</div>
+                            <div class="view-desc">面向畫面</div>
+                        </button>
+                        <button class="view-btn" data-view="back" onclick="app.setView('back')">
+                            <div class="view-icon">🔄</div>
+                            <div class="view-label">背面</div>
+                            <div class="view-desc">背對畫面</div>
+                        </button>
+                        <button class="view-btn" data-view="left" onclick="app.setView('left')">
+                            <div class="view-icon">◀️</div>
+                            <div class="view-label">左側</div>
+                            <div class="view-desc">向左行進</div>
+                        </button>
+                        <button class="view-btn" data-view="right" onclick="app.setView('right')">
+                            <div class="view-icon">▶️</div>
+                            <div class="view-label">右側</div>
+                            <div class="view-desc">向右行進</div>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="control-panel">
+                    <div class="panel-header">參考線設定</div>
+                    <div class="toggle-group">
+                        <div class="toggle-item">
+                            <span class="toggle-label">顯示地平線</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="groundLineToggle" checked onchange="app.toggleGroundLine()">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-item">
+                            <span class="toggle-label">顯示垂直線</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="verticalLineToggle" checked onchange="app.toggleVerticalLine()">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-item">
+                            <span class="toggle-label">顯示骨架</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="skeletonToggle" checked onchange="app.toggleSkeleton()">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-panel">
+                    <div class="panel-header">動作數據 &amp; 統計</div>
+                    <div class="angle-display" id="angleDisplay">
+                        <!-- Dynamically populated -->
+                    </div>
+                    <div class="com-display" id="comDisplay" style="margin-top: 12px; padding: 8px; background: var(--color-bg-6); border-radius: var(--radius-base);">
+                        <div style="font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: #FF9500; margin-bottom: 4px;">🟠 身體質心位置 (CoM)</div>
+                        <div style="font-size: var(--font-size-xs); color: var(--color-text-secondary);" id="comValue">等待分析...</div>
+                    </div>
+                </div>
+
+                <div class="control-panel">
+                    <div class="panel-header">匯出選項</div>
+                    <div class="button-group">
+                        <button class="btn" onclick="app.exportFrame()">📸 匯出畫面</button>
+                        <button class="btn" onclick="app.exportStatistics()">📊 匯出統計數據</button>
+                        <button class="btn" onclick="app.exportReport()">📄 匯出報告</button>
+                    </div>
+                </div>
+
+                <div class="control-panel">
+                    <div class="panel-header">系統狀態</div>
+                    <div id="statusIndicator" class="status-indicator">
+                        <span class="status-dot"></span>
+                        <span>就緒</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+    <script src="app.js"></script>
+</body>
+</html>
