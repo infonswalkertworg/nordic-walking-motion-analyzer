@@ -643,9 +643,17 @@ const app = {
       const forearmVectorY = leftWrist.y - leftElbow.y;
       
       // Calculate pole direction: extend from grip downward and forward
-      // For Nordic walking, pole should angle forward at 30-50 degrees
-      const poleAngleDeg = 40; // Typical Nordic walking pole angle
-      const poleAngleRad = poleAngleDeg * Math.PI / 180;
+      // 使用 atan2 得到從垂直（向下）方向的角度偏離量
+      const armAngleFromVertical = Math.atan2(forearmVectorX, Math.abs(forearmVectorY)) * 180 / Math.PI;
+
+      // 4. 應用生物力學調整：
+      // - 前擺時（armAngleFromVertical > 0）：杖應比手臂多向前傾約 15-20 度
+      // - 後擺時（armAngleFromVertical < 0）：杖應比手臂多向後傾約 10-15 度
+      const biomechanicsOffset = armAngleFromVertical > 0 ? 18 : -12;
+      const poleAngle = armAngleFromVertical + biomechanicsOffset;
+
+      // 5. 計算杖從握點到地面的長度
+      const poleLength = groundY - gripY;
       
       // Determine forward direction based on view
       let forwardDirection = 1;
@@ -660,8 +668,8 @@ const app = {
         forwardDirection = leftHand.z > leftShoulder.z ? 1 : -1;
       }
       
-      // Calculate pole end point on ground
-      const poleLength = groundY - gripY;
+      // 7. 計算杖尖接地位置
+      const poleAngleRad = poleAngle * Math.PI / 180;
       const horizontalOffset = poleLength * Math.tan(poleAngleRad) * forwardDirection;
       const poleEndX = gripX + horizontalOffset;
       const poleEndY = groundY;
@@ -700,9 +708,15 @@ const app = {
       const forearmVectorX = rightWrist.x - rightElbow.x;
       const forearmVectorY = rightWrist.y - rightElbow.y;
       
-      // Calculate pole direction: extend from grip downward and forward
-      const poleAngleDeg = 40; // Typical Nordic walking pole angle
-      const poleAngleRad = poleAngleDeg * Math.PI / 180;
+      // 3. 計算前臂角度
+      const armAngleFromVertical = Math.atan2(forearmVectorX, Math.abs(forearmVectorY)) * 180 / Math.PI;
+
+      // 4. 應用生物力學調整
+      const biomechanicsOffset = armAngleFromVertical > 0 ? 18 : -12;
+      const poleAngle = armAngleFromVertical + biomechanicsOffset;
+
+      // 5. 計算杖長度
+      const poleLength = groundY - gripY;
       
       // Determine forward direction based on view
       let forwardDirection = 1;
@@ -711,17 +725,17 @@ const app = {
       } else if (this.currentView === 'right') {
         forwardDirection = 1; // Forward is to the right
       } else if (this.currentView === 'front') {
-        // Use hand position relative to shoulder for forward/back determination
+      // Use hand position relative to shoulder for forward/back determination
         forwardDirection = rightHand.z < rightShoulder.z ? 1 : -1;
       } else if (this.currentView === 'back') {
         forwardDirection = rightHand.z > rightShoulder.z ? 1 : -1;
       }
       
-      // Calculate pole end point on ground
-      const poleLength = groundY - gripY;
-      const horizontalOffset = poleLength * Math.tan(poleAngleRad) * forwardDirection;
-      const poleEndX = gripX + horizontalOffset;
-      const poleEndY = groundY;
+      // 7. 計算杖尖接地位置
+            const poleAngleRad = poleAngle * Math.PI / 180;
+            const horizontalOffset = poleLength * Math.tan(poleAngleRad) * forwardDirection;
+            const poleEndX = gripX + horizontalOffset;
+            const poleEndY = groundY;
       
       // Draw dashed line from grip to ground contact
       ctx.strokeStyle = '#00FF00'; // Green for right pole
