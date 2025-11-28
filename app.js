@@ -947,8 +947,7 @@ const app = {
           leftHip.x - leftShoulder.x,
           leftHip.y - leftShoulder.y
         );
-        angles.trunkLean = Math.abs(trunkAngle * 180 / Math.PI - 180);
-      }
+    angles.trunkLean = Math.abs(trunkAngle * 180 / Math.PI);      }
       
       // Hip extension (for back view)
       if (this.currentView === 'back') {
