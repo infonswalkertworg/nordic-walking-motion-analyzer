@@ -726,6 +726,18 @@ const app = {
       const horizontalOffset = poleLength * Math.tan(poleAngleRad) * forwardDirection;
       const poleEndX = gripX + horizontalOffset;
       const poleEndY = groundY;
+                  
+            // ===== BOUNDARY CONSTRAINT: Prevent pole from appearing in front of body =====
+            // Maximum angle from vertical to prevent pole going forward (60 degrees)
+            const MAX_POLE_ANGLE = 60; // degrees from vertical
+            const actualPoleAngle = Math.abs(Math.atan2(Math.abs(poleEndX - gripX), poleEndY - gripY) * 180 / Math.PI);
+            
+            // If angle exceeds max, clamp it
+            if (actualPoleAngle > MAX_POLE_ANGLE) {
+              const maxHorizontalOffset = (poleEndY - gripY) * Math.tan(MAX_POLE_ANGLE * Math.PI / 180);
+              poleEndX = gripX + (poleEndX > gripX ? maxHorizontalOffset : -maxHorizontalOffset);
+            }
+            // ===== END BOUNDARY CONSTRAINT =====
       
       // Draw dashed line from grip to ground contact
       ctx.strokeStyle = '#FF0000'; // Red for left pole
@@ -789,6 +801,18 @@ const app = {
             const horizontalOffset = poleLength * Math.tan(poleAngleRad) * forwardDirection;
             const poleEndX = gripX + horizontalOffset;
             const poleEndY = groundY;
+                  
+            // ===== BOUNDARY CONSTRAINT: Prevent pole from appearing in front of body =====
+            // Maximum angle from vertical to prevent pole going forward (60 degrees)
+            const MAX_POLE_ANGLE_RIGHT = 60; // degrees from vertical
+            const actualPoleAngleRight = Math.abs(Math.atan2(Math.abs(poleEndX - gripX), poleEndY - gripY) * 180 / Math.PI);
+            
+            // If angle exceeds max, clamp it
+            if (actualPoleAngleRight > MAX_POLE_ANGLE_RIGHT) {
+              const maxHorizontalOffsetRight = (poleEndY - gripY) * Math.tan(MAX_POLE_ANGLE_RIGHT * Math.PI / 180);
+              poleEndX = gripX + (poleEndX > gripX ? maxHorizontalOffsetRight : -maxHorizontalOffsetRight);
+            }
+            // ===== END BOUNDARY CONSTRAINT =====
       
       // Draw dashed line from grip to ground contact
       ctx.strokeStyle = '#00FF00'; // Green for right pole
@@ -842,15 +866,13 @@ const app = {
       const rightAnkleX = rightAnkle.x * this.canvasElement.width;
       
       // Find forward foot (depends on view direction)
-      let forwardFootX;
-      if (this.currentView === 'left') {
-        forwardFootX = Math.min(leftAnkleX, rightAnkleX); // Leftmost foot is forward
-      } else {
-        forwardFootX = Math.max(leftAnkleX, rightAnkleX); // Rightmost foot is forward
-      }
-      
+     // Calculate stride midpoint (between front foot heel and back foot toe)
+    const frontFootX = this.currentView === 'left' ? Math.min(leftAnkleX, rightAnkleX) : Math.max(leftAnkleX, rightAnkleX);
+    const backFootX = this.currentView === 'left' ? Math.max(leftAnkleX, rightAnkleX) : Math.min(leftAnkleX, rightAnkleX);
+    const strideLength = Math.abs(backFootX - frontFootX) * this.canvasElement.width / this.canvasElement.width;
+    const strideMidpointX = (frontFootX + backFootX) / 2; // Correct midpoint calculation      
       // Calculate distance in pixels, then convert to cm
-      const distancePixels = Math.abs(poleEndX - forwardFootX);
+      const distancePixels = Math.abs(poleEndX - strideMidpointX);
       const distanceCm = distancePixels / this.pixelsPerCm;
       
       this.updatePoleStats('poleStridePosition', distanceCm);
