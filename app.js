@@ -1613,6 +1613,15 @@ this.videoElement.play().catch(err => {
       const canvas = this.canvasElement;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(this.videoElement, 0, 0, canvas.width, canvas.height);
+      
+    // CRITICAL: Always draw video frame to canvas, regardless of Pose status
+    // This ensures canvas updates even if Pose processing is slow
+    const ctx = this.canvasCtx;
+    const canvas = this.canvasElement;
+    if (this.videoElement && ctx && canvas) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(this.videoElement, 0, 0, canvas.width, canvas.height);
+    }
     }
     
 if (this.isAnalyzing) {
