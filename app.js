@@ -103,7 +103,7 @@ const app = {
     this.initializeStats();
     
     // Run diagnostics (with timeout)
-    this.runDiagnosticsWithTimeout();
+this.skipDiagnosis(); // Skip diagnostics to avoid hang on initialization
     
     // Input buttons are immediately clickable
     this.updateStatus('準備中...');
