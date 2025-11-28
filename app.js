@@ -479,8 +479,13 @@ const app = {
     
     // Draw video frame
     if (results.image) {
+// Draw video frame: use MediaPipe image if available, otherwise draw directly from video
+    if (results.image) {
       ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
-    }
+    } else if (this.videoElement) {
+      // Fallback: draw directly from video element if Pose hasn't returned image yet
+      ctx.drawImage(this.videoElement, 0, 0, canvas.width, canvas.height);
+    }    }
     
     if (results.poseLandmarks) {
       // Draw reference lines
