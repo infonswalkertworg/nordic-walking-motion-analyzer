@@ -1538,8 +1538,10 @@ const app = {
         this.canvasElement.width = this.videoElement.videoWidth;
         this.canvasElement.height = this.videoElement.videoHeight;
         
-        this.videoElement.play();
-        this.startAnalysis();
+this.videoElement.play().catch(err => {
+          console.error('Failed to play video:', err);
+          this.updateStatus('無法播放影片');
+        });        this.startAnalysis();
         
         this.isVideoMode = false;
         document.getElementById('playbackControls').style.display = 'none';
@@ -1608,7 +1610,9 @@ const app = {
       ctx.drawImage(this.videoElement, 0, 0, canvas.width, canvas.height);
     }
     
-    requestAnimationFrame(() => this.analyzeFrame());
+if (this.isAnalyzing) {
+      requestAnimationFrame(() => this.analyzeFrame());
+    }
   },
   
   // Export current frame
