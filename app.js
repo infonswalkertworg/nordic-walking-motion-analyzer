@@ -1619,8 +1619,13 @@ this.videoElement.play().catch(err => {
     const ctx = this.canvasCtx;
     const canvas = this.canvasElement;
     if (this.videoElement && ctx && canvas) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+try {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(this.videoElement, 0, 0, canvas.width, canvas.height);
+      } catch (error) {
+      // Silently catch CORS/canvas errors - may occur with certain video sources
+      // Canvas drawing failed, but analyzeFrame will continue
+    }
     }
     }
     
