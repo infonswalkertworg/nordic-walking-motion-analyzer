@@ -197,9 +197,18 @@ body {
 
 .main-grid {
   display: grid;
-  grid-template-columns: 1fr 380px;
+  grid-template-columns: 2fr 1fr;
   gap: var(--space-24);
 }
+        
+html, body { height: 100vh; overflow: hidden; }
+.app-container { height: 100vh; display: flex; flex-direction: column; padding: 8px; }
+.app-header { flex-shrink: 0; margin-bottom: 8px; }
+.main-grid { height: calc(100vh - 60px); gap: 8px; }
+.preview-section { height: 100%; }
+.video-container { height: 100%; }
+.controls-section { height: 100%; overflow-y: auto; gap: 8px; }
+.control-panel { margin-bottom: 8px; }
 
 .preview-section {
   display: flex;
