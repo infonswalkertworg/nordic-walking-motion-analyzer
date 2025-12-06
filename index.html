@@ -698,12 +698,6 @@ body {
                         <button class="btn" onclick="app.handleImportVideo()">
                             📁 匯入影片
                         </button>
-                        <button class="btn" onclick="app.handleCaptureVideo()">
-                            📷 拍攝影片
-                        </button>
-                        <button class="btn" id="cameraBtn" onclick="app.toggleCamera()">
-                            🎥 即時攝影機
-                        </button>
                         <input type="file" id="videoFileInput" class="file-input" accept="video/*" onchange="app.handleFileSelected(event)">
                         <input type="file" id="videoCaptureInput" class="file-input" accept="video/*" capture="environment" onchange="app.handleFileSelected(event)">
                         <input type="file" id="videoFallbackInput" class="file-input" onchange="app.handleFileSelected(event)">
